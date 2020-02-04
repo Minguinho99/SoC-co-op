@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 8e916b6c7cc834024bb6f72c1318e0ed
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: UhBee DongKyung
+  fontNames:
+  - UhBee DongKyung
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 34cca722b19c6478697c21ed12f56ed9, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

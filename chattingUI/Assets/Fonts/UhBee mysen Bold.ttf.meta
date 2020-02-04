@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: df3112dc615244388865946c23d6862f
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: UhBee mysen
+  fontNames:
+  - UhBee mysen
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: d7513f5699d5d4c41a6ee3c23b1fb494, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
