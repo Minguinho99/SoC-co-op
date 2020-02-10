@@ -1,3 +1,11 @@
+//mysql
+var usersRouter = require('./routes/users');
+var sequelize = require('./test/models/index').sequelize;
+
+var app = express();
+sequelize.sync();
+
+//socket
 var io = require('socket.io')(process.env.PORT || 8080)
 
 console.log('Server has started');
