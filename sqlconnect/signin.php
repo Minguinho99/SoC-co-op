@@ -11,25 +11,25 @@
     $nickname = $_POST["nickname"];
     $username = $_POST["username"];
     $password = $_POST["password"];
-    $passwordCheck = $_POST["passwordCheck"];
+    // $passwordCheck = $_POST["passwordCheck"];
 
-    if ($nickname == "") {
-        echo "Please input your name field";
-        exit();
-    }
-    else if ($username == "") {
-        echo "Please input your id field";
-        exit();
-    }
-    else if ($password == "") {
-        echo "Please input your password field";
-        exit();
-    }
+    // if ($nickname == "") {
+    //     echo "Please input your name field";
+    //     exit();
+    // }
+    // else if ($username == "") {
+    //     echo "Please input your id field";
+    //     exit();
+    // }
+    // else if ($password == "") {
+    //     echo "Please input your password field";
+    //     exit();
+    // }
 
-    if ($password != $passwordCheck) {
-        echo "Password does not same";
-        exit();
-    }
+    // if ($password != $passwordCheck) {
+    //     echo "Password does not same";
+    //     exit();
+    // }
 
     //check if name exists
     $namecheckquery = "Select username FROM user_info WHERE username='" . $username . "';";

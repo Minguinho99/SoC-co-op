@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/ChattingScene.unity
+- path: Assets/Scenes/SigninScene.unity
   isLoaded: 1
   isActive: 1
