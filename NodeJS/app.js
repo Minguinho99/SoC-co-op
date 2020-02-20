@@ -1,73 +1,155 @@
 // var io = require('socket.io').listen(8080)
 //mysql
-var express = require("express");
-
-var mysql = require('mysql');
+var express    =  require("express");
+var mysql      = require('mysql');
 const bodyParser = require('body-parser');
 
 var conn = mysql.createConnection({
-    host    : 'localhost',
-    port    : 3306,
-    user    : 'root',
-    password    : 'root',
-    database    : 'chatting',
-    socketPath  : '/Applications/MAMP/tmp/mysql/mysql.sock'
+    host     : 'localhost',
+    port     : 3306,
+    user     : 'root',
+    password : 'root',
+    database : 'chatting',
+    socketPath : '/Applications/MAMP/tmp/mysql/mysql.sock'
 });
 
 var app = express();
-app.use(bodyParser.urlencoded({ extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));//post body 사용가능하게
 app.use(bodyParser.json());
 
-conn.connect(function(err) {
-    if (err) {
-        console.log(err);
-    }
-    else {
-        console.log('fine');
+conn.connect(function(err){
+    if(!err) {
+      console.log("Database is connected ... \n\n");
+    } else {
+      console.log("Error connecting database ... \n\n");
     }
 });
 
-// conn.query('SELECT password FROM user_info WHERE username = ?', '1234', function(err, rows, fields) {
-//     if (err) {
-//         res.send("error");
-//         console.log("error is: " + err);
-//         console.log('Error while performing Query');
-//     }
-//     else {
-//         if (rows[0] == undefined) {
-//             console.log('undifiend happy');
-//         }
-//         else {
-//             console.log(rows[0].password);
-//         }
-//     }
-// })
+app.post("/signin",function(req,res){
+    var username = req.body.username;
+    var nickname = req.body.nickname;
+    var password = req.body.password;
 
-// app.get("/signinCheck", function(req, res) {
-//     console.log('connect');
-// });
+    conn.query('SELECT username FROM user_info WHERE username = ?', username, function(err, rows, fields) {
+        if (err) {
+            res.status(500).send('Internal Server Error');
+            console.log(err);
+            console.log('Error while performing Query.');
+        }
+        else {
+            var result_json = {};
+            if (rows[0] == undefined) {
+                conn.query('INSERT INTO user_info (nickname, username, password) values(?, ?, ?)', [nickname, username, password], function(err, rows, fields) {
+                    if (err) {
+                        res.status(500).send('Internal Server Error');
+                        console.log(err);
+                        console.log('Error while performing Query.');
+                    }
+                    else {
+                        result_json["state"] = 'Success';
+                        result_json["userid"] = username;
+                        res.json(result_json);
+                    }
+                })
+            }
+            else {
+                result_json["state"] = 'there are exsit user';
+                result_json["userid"] = username;
+                res.json(result_json);
+            }
+        }
+    })
+})
 
-// app.post("/s", function(req,res){
-//     var user_id = req.body.username;
-//     var user_name = req.body.nickname;
-//     var password = req.body.password;
-//     // var sql = 'SELECT username FROM user_info WHERE username = ?';
-//     var sql = 'INSERT INTO user_info (nickname, username, password) values(?, ?, ?)';
+app.post('/login', function(req, res) {
+    var username = req.body.name;
+    var password = req.body.password;
     
-//     conn.query(sql, [user_id, user_name, password], function(err, rows, fields) {
-//       if (err)
-//       {
-//         res.send("error");
-//         console.log("error is:"+err);
-//         console.log('Error while performing Query.');
-//       }
-//       else
-//       {
-//         console.log(rows[0]);
-//         res.send(rows[0]);
-//       }
-//     });
-//   });
+    conn.query('SELECT username FROM user_info WHERE username = ?', username, function(err, rows, fields) {
+        if (err) {
+            res.send("error");
+            console.log("error is: " + err);
+            console.log('Error while performing Query');
+        }
+        else {
+            if (rows[0] == undefined) {
+                console.log('There is no such id');
+                var result_json = {};
+                result_json["state"] = 'There is no such ID';
+                result_json["success"] = false;
+                res.json(result_json);
+            }
+            else {
+                conn.query('SELECT password, nickname FROM user_info WHERE username = ?', username, function(err, rows, fields) {
+                    if (err) {
+                        res.send("error");
+                        console.log("error is : " + err);
+                        console.log('Error while performing Query');
+                    }
+                    else {
+                        if (rows[0].password == password) {
+                            var result_json = {};
+                            result_json["state"] = 'Success';
+                            result_json["success"] = true;
+                            res.json(result_json);
+                            console.log('loginSuccess');
+                        }
+                        else {
+                            var result_json = {};
+                            result_json["state"] = 'Password is wrong';
+                            result_json["success"] = false;
+                            res.json(result_json);
+                            console.log('right password : ' + rows[0].password);
+                        }
+                    }
+                })
+            }
+        }
+    })
+});
+    
+app.post('/password', function(req, res) {
+    var nickname = req.body.nickname;
+    var username = req.body.username;
+    
+    conn.query('SELECT password, nickname FROM user_info WHERE username = ?', username, function(err, rows, fields) {
+        if (err) {
+            res.send("error");
+            console.log("error is: " + err);
+            console.log('Error while performing Query');
+        }
+        else {
+            if (rows[0] != undefined) {
+                if (rows[0].nickname == nickname) {
+                    console.log('Success Find Password');
+                    var result_json = {};
+                    result_json["state"] = 'Success';
+                    result_json["password"] = rows[0].password;
+                    result_json["success"] = true;
+                    res.json(result_json);
+                }
+                else {
+                    var result_json = {};
+                    result_json["state"] = 'Fail';
+                    result_json["password"] = '';
+                    result_json["success"] = false;
+                    res.json(result_json);
+                }
+            }
+            else {
+                var result_json = {};
+                result_json["state"] = 'Fail';
+                result_json["password"] = '';
+                result_json["success"] = false;
+                res.json(result_json);
+            }
+        }
+    })
+});
+
+app.listen(3000, function(){
+    console.log('Connected 3000 port!');
+});
 
 //socket
 
@@ -76,103 +158,6 @@ var io = require('socket.io')(process.env.PORT || 8080)
 console.log('Server has started');
 
 io.on('connection', function(socket) {
-    //Signin Page
-    socket.emit('signin', 'hello');
-
-    socket.on('idCheck', function(data) {
-        const splitText = data.split('|');
-
-        conn.query('SELECT username FROM user_info WHERE username = ?', splitText[1], function(err, rows, fields) {
-            if (err) {
-                res.send("error");
-                console.log("error is: " + err);
-                console.log('Error while performing Query');
-            }
-            else {
-                if (rows[0] == undefined) {
-                    console.log('undifiend happy');
-                    conn.query('INSERT INTO user_info (nickname, username, password) values(?, ?, ?)', [splitText[0], splitText[1], splitText[2]], function(err, rows, fields) {
-                        socket.emit('signinSuc', 'Success!');
-                    })
-                }
-                else {
-                    console.log(rows[0]);
-                    socket.emit('idExist', 'Name already exists');
-                }
-            }
-        })
-    })
-
-    //Login Page
-    socket.emit('login', 'hello');
-
-    socket.on('loginCheck', function(data) {
-        const splitText = data.split('|');
-        
-        conn.query('SELECT username FROM user_info WHERE username = ?', splitText[0], function(err, rows, fields) {
-            if (err) {
-                res.send("error");
-                console.log("error is: " + err);
-                console.log('Error while performing Query');
-            }
-            else {
-                if (rows[0] == undefined) {
-                    console.log('There is no such id');
-                    socket.emit('loginIdWrong', 'No Such ID');
-                }
-                else {
-                    conn.query('SELECT password, nickname FROM user_info WHERE username = ?', splitText[0], function(err, rows, fields) {
-                        if (err) {
-                            res.send("error");
-                            console.log("error is : " + err);
-                            console.log('Error while performing Query');
-                        }
-                        else {
-                            if (rows[0].password == splitText[1]) {
-                                socket.emit('loginSuccess', rows[0].nickname);
-                                console.log('loginSuccess');
-                            }
-                            else {
-                                console.log('right password : ' + rows[0].password);
-                                socket.emit('loginPasswordWrong', 'wrong password');
-                            }
-                        }
-                    })
-                }
-            }
-        })
-    });
-
-    //Find Password Page
-    socket.emit('findPassword', 'hello');
-    
-    socket.on('passwordCheck', function(data) {
-        const splitText = data.split('|');
-        
-        conn.query('SELECT password, nickname FROM user_info WHERE username = ?', splitText[0], function(err, rows, fields) {
-            if (err) {
-                res.send("error");
-                console.log("error is: " + err);
-                console.log('Error while performing Query');
-            }
-            else {
-                if (rows[0] != undefined) {
-                    if (rows[0].nickname == splitText[1]) {
-                        console.log('Success Find Password');
-                        socket.emit('successFindPassword', rows[0].password);
-                    }
-                    else {
-                        socket.emit('passwordWrongInfo', 'wrongInfo');
-                    }
-                }
-                else {
-                    socket.emit('passwordWrongInfo', 'wrongInfo');
-                }
-            }
-        })
-    })
-
-    //Chatting Page
 
     console.log('Connection Made!');
     socket.emit('new', {hello: 'world'});

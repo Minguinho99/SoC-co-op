@@ -5,8 +5,6 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
-using socket.io;
-
 public class SigninPage : MonoBehaviour
 {
     public InputField nameField;
@@ -17,17 +15,18 @@ public class SigninPage : MonoBehaviour
     public Button signinBtn;
     public Text wrongText;
 
-
-    public string serverUrl = "http://localhost:8080";
-    Socket socket;
+    [System.Serializable]
+	public class UserData
+	{
+		public string state;
+		public int userid;
+	}
+    // public string serverUrl = "http://localhost:8080";
+    // Socket socket;
 
 
     public void LoginBtn() {
         SceneManager.LoadScene("LoginScene");
-
-        // socket.On("signin", (string data) => {
-        //     socket.Emit("disconnect", "");
-        // });
     }
     public void SigninBtn() {
         if (nameField.text == "") {
@@ -43,24 +42,36 @@ public class SigninPage : MonoBehaviour
             wrongText.GetComponent<Text>().text= "Password does not same";
         }
         else {
-            socket = Socket.Connect(serverUrl);
-            
-            string sendStr = nameField.text + "|" + idField.text + "|" + passwordField.text;
-
-            socket.On("signin", (string data) => {
-                socket.Emit("idCheck", sendStr);
-            });
-
-            socket.On("signinSuc", (string data) => {
-                UnityEngine.SceneManagement.SceneManager.LoadScene("SuccessSigninScene");
-                // socket.Emit("disconnect", "");
-            });
-
-            socket.On("idExist", (string data) => {
-                wrongText.GetComponent<Text>().text= "Name already exists";
-            });
+            StartCoroutine(SigninCo());
         }
-        // StartCoroutine(SigninCo());
+    }
+
+    IEnumerator SigninCo() {
+        WWWForm form = new WWWForm();
+        form.AddField("username", idField.text);
+        form.AddField("nickname", nameField.text);
+        form.AddField("password", passwordField.text);
+        UnityWebRequest www = UnityWebRequest.Post("http://localhost:3000/signin", form);
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError) {
+			Debug.Log(www.error);
+            Debug.Log("Error");
+		}
+		else {
+			Debug.Log("text : " + www.downloadHandler.text);
+			UserData data = JsonUtility.FromJson<UserData> (www.downloadHandler.text);
+			
+            if (data.state == "Success") {
+                Debug.Log("User created successfully.");
+                UnityEngine.SceneManagement.SceneManager.LoadScene("SuccessSigninScene");
+            }
+            else {
+                Debug.Log("User Creation failed.");
+                wrongText.GetComponent<Text>().text = "Name already exists";
+            }
+		}
+        
     }
 
     public void VerifyInputs() {
