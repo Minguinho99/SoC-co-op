@@ -24,6 +24,10 @@ public class SigninPage : MonoBehaviour
 
     public void LoginBtn() {
         SceneManager.LoadScene("LoginScene");
+
+        // socket.On("signin", (string data) => {
+        //     socket.Emit("disconnect", "");
+        // });
     }
     public void SigninBtn() {
         if (nameField.text == "") {
@@ -49,6 +53,7 @@ public class SigninPage : MonoBehaviour
 
             socket.On("signinSuc", (string data) => {
                 UnityEngine.SceneManagement.SceneManager.LoadScene("SuccessSigninScene");
+                // socket.Emit("disconnect", "");
             });
 
             socket.On("idExist", (string data) => {
@@ -57,50 +62,6 @@ public class SigninPage : MonoBehaviour
         }
         // StartCoroutine(SigninCo());
     }
-
-    // IEnumerator SigninCo() {
-    //     //check value
-    //     WWWForm form = new WWWForm();
-    //     form.AddField("nickname", nameField.text);
-    //     form.AddField("username", idField.text);
-    //     form.AddField("password", passwordField.text);
-        
-    //     // UnityWebRequest www = UnityWebRequest.Post("http://localhost:3306/s", form);
-    //     UnityWebRequest www = UnityWebRequest.Get("http://localhost:3306/signinCheck");
-    //     yield return www.SendWebRequest();
-
-    //     if(www.isNetworkError || www.isHttpError) {
-    //         Debug.Log(www.error);
-    //     }
-    //     else {
-    //         Debug.Log(www.downloadHandler.text);
-    //         // UserData data = JsonUtility.FromJson<UserData> (www.downloadHandler.text);
-    //         // Debug.Log("name:"+data.userid);
-    //     }
-    //     //end
-
-
-    //         // WWW www = new WWW("http://localhost/sqlconnect/signin.php", form);
-    //         // yield return www;
-
-    //         // if (www.text == "0") {
-    //         //     Debug.Log("User created successfully.");
-    //         //     UnityEngine.SceneManagement.SceneManager.LoadScene("SuccessSigninScene");
-    //         // }
-    //         // else {
-    //         //     Debug.Log("User creation failed. Err " + www.text);
-    //         //     wrongText.GetComponent<Text>().text= www.text;
-    //         // }
-
-    //     // if(www.isNetworkError) {
-    //     //     Debug.Log(www.error);
-    //     // }
-    //     // else {
-    //     //     Debug.Log(www.downloadHandler.text);
-    //     //     // PacketData data = JsonUtility.FromJson<UserData>(www.downloadHandler.text);
-            
-    //     // }        
-    // }
 
     public void VerifyInputs() {
         signinBtn.interactable = (idField.text.Length >= 8 && passwordField.text.Length >= 8);

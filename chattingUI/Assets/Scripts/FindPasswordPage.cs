@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using socket.io;
 
 public class FindPasswordPage : MonoBehaviour
 {
@@ -11,35 +12,39 @@ public class FindPasswordPage : MonoBehaviour
 
     public Text passwordText;
 
+    public string serverUrl = "http://localhost:8080";
+    Socket socket;
+
     public void SigninBtn() {
         SceneManager.LoadScene("SigninScene");
     }
 
     public void FindPasswordBtn() {
-        GetComponent<Animator>().SetTrigger("findPassword");
-        StartCoroutine(SigninCo());
-    }
+        socket = Socket.Connect(serverUrl);
 
-    IEnumerator SigninCo() {
-        WWWForm form = new WWWForm();
-        form.AddField("nickname", nameField.text);
-        form.AddField("username", idField.text);
-        WWW www = new WWW("http://localhost/sqlconnect/findpassword.php", form);
-        yield return www;
-        if (www.text != "0") {
-            Debug.Log("User created successfully.");
-            passwordText.GetComponent<Text>().text= www.text;
-            Debug.Log(www.text);
-            GameObject.Find("Canvas/FindAfter/title/Password").SetActive(true);
-            GameObject.Find("Canvas/FindAfter/title/wrongText").SetActive(false);
-            
-        }
-        else {
-            Debug.Log("User creation failed. Err " + www.text);
+        string passwordInfo = idField.text + "|" + nameField.text;
+
+        socket.On("findPassword", (string data) => {
+            socket.Emit("passwordCheck", passwordInfo);
+        });
+
+        GetComponent<Animator>().SetTrigger("findPassword");
+
+        socket.On("passwordWrongInfo", (string data) => {
+            GameObject.Find("Canvas/FinadAfter").SetActive(true);
             GameObject.Find("Canvas/FindAfter/title/Password").SetActive(false);
             GameObject.Find("Canvas/FindAfter/title/wrongText").SetActive(true);
-        }
-        
+            // socket.Emit("disconnect", "");
+        });
+
+        socket.On("successFindPassword", (string data) => {
+            Debug.Log("User created successfully.");
+            passwordText.GetComponent<Text>().text= data;
+            Debug.Log(data);
+            GameObject.Find("Canvas/FindAfter/title/Password").SetActive(true);
+            GameObject.Find("Canvas/FindAfter/title/wrongText").SetActive(false);
+            // socket.Emit("disconnect", "");
+        });
     }
 
     public void LoginBtn() {

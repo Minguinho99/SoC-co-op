@@ -13,9 +13,11 @@ public class ChattingPage : MonoBehaviour {
 
     public InputField userNameField;
 
+
     public string serverUrl = "http://localhost:8080";
     Socket socket;
     
+    public int check = 0;
 
     private void Awake() {
         if (DBManager.username == null) {
@@ -30,9 +32,14 @@ public class ChattingPage : MonoBehaviour {
         }
 
         socket = Socket.Connect(serverUrl);
+        // socket.Emit("userName", DBManager.username);
 
         socket.On("new", (string data) => {
-            socket.Emit("userName", DBManager.username);
+            if (check == 0) {
+                socket.Emit("userName", DBManager.username);
+                check = check + 1;
+                Debug.Log("user send new user : " + DBManager.username);
+            }
         });
     }
 
@@ -69,9 +76,10 @@ public class ChattingPage : MonoBehaviour {
         GameObject prefabEnterUser = Resources.Load ("enterUser") as GameObject;
         GameObject enterUser = MonoBehaviour.Instantiate (prefabEnterUser) as GameObject;
 
-        enterUser.name = "outUser";
+        enterUser.name = "enterUser";
+        
         enterUser.GetComponent<Text>().text = name + "님이 들어오셨습니다.";
-        enterUser.transform.parent = contents.transform;
+        enterUser.transform.SetParent(contents.transform);
         enterUser.transform.localScale = Vector3.one;
     }
 
@@ -100,7 +108,7 @@ public class ChattingPage : MonoBehaviour {
         // socket.On("new", (string data) => {
         //     socket.Emit("message", PlayerPrefs.GetString("chatText", "null"));
         // });
-        socket.Emit("message", PlayerPrefs.GetString("chatText", "null"));
+        socket.Emit("message", DBManager.username + "|" + PlayerPrefs.GetString("chatText", "null"));
         Debug.Log(PlayerPrefs.GetString("chatText", "null"));
     }
     
@@ -115,22 +123,22 @@ public class ChattingPage : MonoBehaviour {
     }
 
     public void SaveBtn() {
-        StartCoroutine(SaveUserData());
+        // StartCoroutine(SaveUserData());
     }
 
-    IEnumerator SaveUserData() {
-        WWWForm form = new WWWForm();
-        form.AddField("name", DBManager.username);
-        form.AddField("nickname", DBManager.nickname);
+    // IEnumerator SaveUserData() {
+    //     WWWForm form = new WWWForm();
+    //     form.AddField("name", DBManager.username);
+    //     form.AddField("nickname", DBManager.nickname);
 
-        WWW www = new WWW("http://localhost/sqlconnect/savedata.php", form);
-        yield return www;
-        if (www.text == "0") {
-            Debug.Log("Game Saved.");
-        }
-        else {
-            Debug.Log("Save failed. Error #" + www.text);
-        }
-    }
+    //     WWW www = new WWW("http://localhost/sqlconnect/savedata.php", form);
+    //     yield return www;
+    //     if (www.text == "0") {
+    //         Debug.Log("Game Saved.");
+    //     }
+    //     else {
+    //         Debug.Log("Save failed. Error #" + www.text);
+    //     }
+    // }
     
 }
