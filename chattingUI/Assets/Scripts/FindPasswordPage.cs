@@ -24,8 +24,8 @@ public class FindPasswordPage : MonoBehaviour
     }
 
     public void FindPasswordBtn() {
-        StartCoroutine(PasswordCo());
         GetComponent<Animator>().SetTrigger("findPassword");
+        StartCoroutine(PasswordCo());
     }
 
     IEnumerator PasswordCo() {
@@ -51,7 +51,6 @@ public class FindPasswordPage : MonoBehaviour
                 GameObject.Find("Canvas/FindAfter/title/wrongText").SetActive(false);
             }
             else {
-                GameObject.Find("Canvas/FinadAfter").SetActive(true);
                 GameObject.Find("Canvas/FindAfter/title/Password").SetActive(false);
                 GameObject.Find("Canvas/FindAfter/title/wrongText").SetActive(true);
             }
