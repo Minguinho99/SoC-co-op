@@ -1,22 +1,12 @@
 language: node_js
-os: linux
-jdk:
-  - openjdk8
-
+node_js:
+  - 0.6
+  - 0.7
+before_install:
+  - npm install mocha -g
 branches:
   only:
     - master
-
-# Travis CI 서버의 Home
-cache:
-  directories:
-    - '$HOME/.m2/repository'
-    - '$HOME/.gradle'
-
-script: "./gradlew clean build"
-
-# CI 실행 완료시 메일로 알람
-notifications:
-  email:
-    recipients:
-      - dusl9905@gmail.com 
+matrix:
+  allow_failures:
+    - node_js: 0.7
