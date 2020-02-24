@@ -1,21 +1,32 @@
-language: javascript
-jdk:
-  - openjdk8
-
-branches:
-  only:
-    - master
-
-# Travis CI 서버의 Home
-cache:
-  directories:
-    - '$HOME/.m2/repository'
-    - '$HOME/.gradle'
-
-script: "./gradlew clean build"
-
-# CI 실행 완료시 메일로 알람
-notifications:
-  email:
-    recipients:
-      - dusl9905@gmail.com
+{
+  "language": "node_js",
+  "os": [
+    "linux"
+  ],
+  "jdk": [
+    "openjdk8"
+  ],
+  "branches": {
+    "only": [
+      "master"
+    ]
+  },
+  "cache": {
+    "directories": [
+      "$HOME/.m2/repository",
+      "$HOME/.gradle"
+    ]
+  },
+  "script": [
+    "./gradlew clean build"
+  ],
+  "notifications": {
+    "email": [
+      {
+        "recipients": [
+          "dusl9905@gmail.com"
+        ]
+      }
+    ]
+  }
+}
