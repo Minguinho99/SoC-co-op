@@ -53,7 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\SocketIO\JSONObject\Editor\JSONChecker.cs" />
+     <Compile Include="Assets\Editor\BundleBuilder.cs" />
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>/Users/jungyeon/Documents/19Winter/co-op/coding/project#1/chattingUI/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>
@@ -303,6 +303,9 @@
  <Reference Include="UnityEditor.OSXStandalone.Extensions">
  <HintPath>/Applications/Unity/Hub/Editor/2018.3.8f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll</HintPath>
  </Reference>
+ <Reference Include="Newtonsoft.Json">
+ <HintPath>/Users/jungyeon/Documents/19Winter/co-op/coding/project#1/chattingUI/Assets/JsonDotNet/Assemblies/Standalone/Newtonsoft.Json.dll</HintPath>
+ </Reference>
  <Reference Include="SuperSocket.ClientEngine.Common">
  <HintPath>/Users/jungyeon/Documents/19Winter/co-op/coding/project#1/chattingUI/Assets/UnitySocketIO/SuperSocket.ClientEngine.Common.dll</HintPath>
  </Reference>
@@ -338,9 +341,6 @@
  </Reference>
  <Reference Include="UnityEditor.Purchasing">
  <HintPath>/Users/jungyeon/Documents/19Winter/co-op/coding/project#1/chattingUI/Library/PackageCache/com.unity.purchasing@2.0.3/Editor/UnityEditor.Purchasing.dll</HintPath>
- </Reference>
- <Reference Include="Newtonsoft.Json">
- <HintPath>/Users/jungyeon/Documents/19Winter/co-op/coding/project#1/chattingUI/Assets/JsonDotNet/Assemblies/Standalone/Newtonsoft.Json.dll</HintPath>
  </Reference>
  <Reference Include="mscorlib">
  <HintPath>/Applications/Unity/Hub/Editor/2018.3.8f1/Unity.app/Contents/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>

@@ -1,0 +1,15 @@
+OSXUniversal
+PlayerPath?
+/Users/jungyeon/Documents/19Winter/co-op/coding/project#1/chattingUI/Assets/AssetBundles/bundle
+SceneListBegin?
+Assets/Scenes/SigninScene.unity
+SceneListEnd?
+5fc094978ce3e3591a7500ed380d854a UnityEngine.UI.dll:UnityEngine.UI.Button
+4bc4346a71a8df53a6b106f68ef3a190 UnityEngine.UI.dll:UnityEngine.UI.CanvasScaler
+cc4274b586df3c02688bac01b88bd16c UnityEngine.UI.dll:UnityEngine.EventSystems.EventSystem
+ae83e830e7a90c0aff918c4c2e520825 UnityEngine.UI.dll:UnityEngine.UI.GraphicRaycaster
+686dc5ae0550d5cc850c0d1dcce4c018 UnityEngine.UI.dll:UnityEngine.UI.Image
+720df30c812f6949ccf5cf52c5eca757 UnityEngine.UI.dll:UnityEngine.UI.InputField
+748dd2a2a28da4e618912da5ac45684b UnityEngine.UI.dll:UnityEngine.EventSystems.StandaloneInputModule
+fc108ce7d98c40ac0907e8ca7f500c76 UnityEngine.UI.dll:UnityEngine.UI.Text
+0f4ade9e5f4450b819da30d0e2d13bda Assembly-CSharp.dll:.SigninPage
