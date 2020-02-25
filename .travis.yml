@@ -1,14 +1,10 @@
 language: node_js
 node_js:
-  - 0.6
-  - 0.7
-branches:
-  only:
-    - master
-matrix:
-  allow_failures:
-    - node_js: 0.7
-notifications:
-  email:
-    recipients:
-      - dusl9905@gmail.com 
+  - 7
+before_script:
+  - npm install -g gulp-cli
+script: gulp
+before_install:
+  - npm i -g npm@version-number
+cache:
+  npm: false
