@@ -1,10 +1,22 @@
 language: node_js
 node_js:
   - 7
+
+branches:
+  only:
+    - master
+
 before_script:
   - npm install -g gulp-cli
-script: gulp
+
+script: "./gradlew clean build"
+
 before_install:
   - npm i -g npm@version-number
 cache:
   npm: false
+
+notifications:
+  email:
+    recipients:
+      - jyjeon99@kaist.ac.kr
